@@ -10,6 +10,8 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
+    var topics:[Topic] = []
+    
     // MARK:- UI Elements
     
     var topicsTableView : UITableView = {
@@ -28,6 +30,8 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Sample data
+        filterTopics(topics: Topic.getSampleTopics())
         
         // Setups
         self.view.applyBackground()
@@ -59,14 +63,26 @@ class HomeViewController: UIViewController {
         
         // Register Cell
         self.topicsTableView.register(UINib.init(nibName: "TopicCell", bundle: nil), forCellReuseIdentifier: "TopicCell")
+        self.topicsTableView.separatorStyle = .none
         
         // Set Data source
         self.topicsTableView.dataSource = self
         self.topicsTableView.delegate = self
-        //
         
     }
     
+    
+    func filterTopics(topics:[Topic]){
+        
+        // Sort
+        let sortedTopics = topics.sorted(by: {
+            $0.voteCount > $1.voteCount
+        })
+        
+        let top20  = sortedTopics.count > 20 ? sortedTopics[0 ..< 20] : sortedTopics[0 ..< sortedTopics.count]
+        self.topics = Array(top20)
+        
+    }
     
     
     
@@ -88,13 +104,15 @@ extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return topics.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : TopicCell = tableView.dequeueReusableCell(withIdentifier: "TopicCell")  as! TopicCell
-        cell.topicLabel.text = "hello world"
-        cell.countLabel.text = "+ 55"
+        let topic = topics[indexPath.row]
+        
+        cell.topicLabel.text = topic.title
+        cell.countLabel.text = topic.voteCount >= 0 ?   "+ \(topic.voteCount)" : "- \(topic.voteCount)"
         cell.backgroundColor = UIColor.clear
         return cell
     }
