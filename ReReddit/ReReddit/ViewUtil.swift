@@ -30,4 +30,21 @@ public class ViewUtil{
     
     
     
+    /// Get the cell height based on the topic title
+    ///
+    /// - Parameters:
+    ///   - title: topic title
+    ///   - view: parent view ( View controllers main view)
+    /// - Returns: Cell Height
+    static func getCellHeightFor(title:String,view:UIView) -> CGFloat{
+        
+        let textWidth = view.frame.width - (80) // padding 20 + 15 each side
+        let textSize = CGSize(width: textWidth, height: 1000)
+        let attributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 16)]
+        let estimatedFram = NSString(string: title).boundingRect(with: textSize, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        return estimatedFram.height + 90
+    }
+    
+    
+    
 }

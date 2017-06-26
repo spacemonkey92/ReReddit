@@ -31,7 +31,8 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Sample data
-        filterTopics(topics: Topic.getSampleTopics())
+        self.topics = Topic.getSampleTopics()
+        filterTopics()
         
         // Setups
         self.view.applyBackground()
@@ -45,7 +46,13 @@ class HomeViewController: UIViewController {
     
     func setupNavBar(){
         self.navBar.customSetup(title: "Topics", view: self.view)
-        self.view.addSubview(navBar);
+        self.view.addSubview(navBar)
+        let addButton = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(didClickAdd))
+        navBar.topItem?.rightBarButtonItem = addButton
+    }
+    
+    func didClickAdd(){
+        self.present(AddTopicViewController(), animated: true, completion: nil)
     }
     
     func setupTableView(){
@@ -72,7 +79,7 @@ class HomeViewController: UIViewController {
     }
     
     
-    func filterTopics(topics:[Topic]){
+    func filterTopics(){
         
         // Sort
         let sortedTopics = topics.sorted(by: {
@@ -97,7 +104,7 @@ class HomeViewController: UIViewController {
 }
 
 
-extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
+extension HomeViewController : UITableViewDelegate, UITableViewDataSource , ButtonCellDelegate{
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -109,10 +116,13 @@ extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : TopicCell = tableView.dequeueReusableCell(withIdentifier: "TopicCell")  as! TopicCell
+        if cell.buttonDelegate == nil {
+            cell.buttonDelegate = self
+        }
         let topic = topics[indexPath.row]
-        
+        cell.topicLabel.numberOfLines = 0
         cell.topicLabel.text = topic.title
-        cell.countLabel.text = topic.voteCount >= 0 ?   "+ \(topic.voteCount)" : "- \(topic.voteCount)"
+        cell.countLabel.text = topic.voteCount >= 0 ?   "+\(topic.voteCount)" : "\(topic.voteCount)"
         cell.backgroundColor = UIColor.clear
         return cell
     }
@@ -122,8 +132,80 @@ extension HomeViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 140
+        // Dynamic cell height 
+        let topic = self.topics[indexPath.row]
+        return ViewUtil.getCellHeightFor(title: topic.title, view: self.view)
     }
+    
+    
+    // MARK:- Voting Methods
+    
+    
+    
+    /// Update the vote count of a perticular topic
+    /// Update the view
+    ///
+    /// - Parameters:
+    ///   - cell: cell
+    ///   - action: true = up , false : down
+    func didClick(cell: TopicCell, action: Bool) {
+        
+        guard let path = self.topicsTableView.indexPath(for: cell) else {
+            return
+        }
+        let position = path.row
+        
+        
+        if action{
+            // Up
+            self.topics[position].up()
+            let abovePositoin = position - 1
+            if abovePositoin < 0 {
+                updateAt(path: path)
+                return // its already on top
+            }
+            if topics[abovePositoin].voteCount < topics[position].voteCount {
+                rearrange()
+                return
+            }else{
+                updateAt(path: path)
+                return
+            }
+        }else{
+            
+            // Down voted
+            self.topics[position].down()
+            let nextPositoin = position + 1
+            if nextPositoin >= topics.count {
+                updateAt(path: path)
+                return // its already at the bottom
+            }
+            if topics[nextPositoin].voteCount > topics[position].voteCount {
+                rearrange()
+                return
+            }else{
+                updateAt(path: path)
+                return
+            }
+        }
+    }
+    
+    
+    
+    /// Re arrange the topics and reload the data table
+    func rearrange(){
+        filterTopics()
+        topicsTableView.reloadData()
+        return
+    }
+    
+    // Update the table at path
+    func updateAt(path:IndexPath){
+        topicsTableView.beginUpdates()
+        topicsTableView.reloadRows(at: [path], with: UITableViewRowAnimation.none)
+        topicsTableView.endUpdates()
+    }
+    
     
     
 }
