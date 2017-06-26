@@ -15,6 +15,8 @@ class TopicCell: UITableViewCell {
     @IBOutlet weak var upButton: UIButton!
     @IBOutlet weak var downButton: UIButton!
 
+    var buttonDelegate: ButtonCellDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -25,5 +27,20 @@ class TopicCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    @IBAction func didClickUpButton(_ sender: Any) {
+        if let delegate = self.buttonDelegate{
+            delegate.didClick(cell: self,action: true)
+        }
+    }
+    @IBAction func didClickDownButton(_ sender: Any) {
+        if let delegate = self.buttonDelegate{
+            delegate.didClick(cell: self,action: false)
+        }
+    }
 
+
+}
+
+protocol ButtonCellDelegate {
+    func didClick(cell: TopicCell, action:Bool)
 }
