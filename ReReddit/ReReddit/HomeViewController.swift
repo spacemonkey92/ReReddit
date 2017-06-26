@@ -8,8 +8,9 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController , AddTopicDelegate {
 
+    
     var topics:[Topic] = []
     
     // MARK:- UI Elements
@@ -24,6 +25,10 @@ class HomeViewController: UIViewController {
         let navbar = UINavigationBar()
         return navbar
     }()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     
     // MARK:- ViewController Methods
@@ -40,6 +45,8 @@ class HomeViewController: UIViewController {
         setupTableView()
     }
     
+
+    
     
     
     // MARK:- View Setup Methods
@@ -52,7 +59,9 @@ class HomeViewController: UIViewController {
     }
     
     func didClickAdd(){
-        self.present(AddTopicViewController(), animated: true, completion: nil)
+        let addTopicVC = AddTopicViewController()
+        addTopicVC.delegate = self
+        self.present(addTopicVC, animated: true, completion: nil)
     }
     
     func setupTableView(){
@@ -80,7 +89,6 @@ class HomeViewController: UIViewController {
     
     
     func filterTopics(){
-        
         // Sort
         let sortedTopics = topics.sorted(by: {
             $0.voteCount > $1.voteCount
@@ -88,18 +96,19 @@ class HomeViewController: UIViewController {
         
         let top20  = sortedTopics.count > 20 ? sortedTopics[0 ..< 20] : sortedTopics[0 ..< sortedTopics.count]
         self.topics = Array(top20)
-        
     }
     
-    
-    
+    // MARK:- Add Topic Delegates
+    func didAddTopic(topic: Topic) {
+        self.topics.append(topic)
+        rearrange()
+    }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
 
 }
 

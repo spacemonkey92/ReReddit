@@ -84,16 +84,15 @@
 		94BC0F611EFFB00900CB1DB8 /* ReReddit */ = {
 			isa = PBXGroup;
 			children = (
+				94F8FD7D1F01104500B9946A /* Util */,
 				94F8FD781F00D9C100B9946A /* Models */,
 				94A5B82F1F0030CA001CEA03 /* Views */,
 				949E315E1EFFB5CD000830D4 /* ViewControllers */,
 				94BC0F621EFFB00900CB1DB8 /* AppDelegate.swift */,
-				94A5B82A1EFFB97D001CEA03 /* ViewUtil.swift */,
 				94BC0F661EFFB00900CB1DB8 /* Main.storyboard */,
 				94BC0F691EFFB00900CB1DB8 /* Assets.xcassets */,
 				94BC0F6B1EFFB00900CB1DB8 /* LaunchScreen.storyboard */,
 				94BC0F6E1EFFB00900CB1DB8 /* Info.plist */,
-				94A5B82C1F001F68001CEA03 /* Extensions.swift */,
 			);
 			path = ReReddit;
 			sourceTree = "<group>";
@@ -104,6 +103,15 @@
 				94F8FD791F00D9E100B9946A /* Topic.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		94F8FD7D1F01104500B9946A /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				94A5B82A1EFFB97D001CEA03 /* ViewUtil.swift */,
+				94A5B82C1F001F68001CEA03 /* Extensions.swift */,
+			);
+			name = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -38,7 +38,7 @@ class Topic {
         let topic1 = Topic(title: "Just switched from Galaxy Tab to 2017 iPad", voteCount: 6)
         let topic2 = Topic(title: "Apple & Tim Cook celebrate #Pride2017 in cities around the world", voteCount: 2)
         let topic3 = Topic(title: "Latest iPhone 8 dummy images further corroborate glass back, in-screen Touch ID", voteCount: 25)
-        let topic4 = Topic(title: "Apple has removed 58k apps from the Chinese App Store over the last two weeks, 10x more than normal hahah its been so awesome writing this super long text. you know wat im saing walter white", voteCount: 1)
+        let topic4 = Topic(title: "Apple has removed 58k apps from the Chinese App Store over the last two weeks, 10x more than normal. A report earlier this week detailed Apple’s efforts to remove spam and copy-cat apps from the App Store", voteCount: 1)
         let topic5 = Topic(title: "Nike SNKRS iOS app adds AR features to make exclusive sneaker releases interactive", voteCount: 25)
         
         return [topic1,topic2,topic3,topic4,topic5]

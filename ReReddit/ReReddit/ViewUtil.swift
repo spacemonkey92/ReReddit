@@ -46,5 +46,13 @@ public class ViewUtil{
     }
     
     
+    static func popAlertView(vc:UIViewController, title:String,message:String,option:String){
+        
+        let alert = UIAlertController(title: title  , message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: option, style: UIAlertActionStyle.default, handler: nil))
+        vc.present(alert, animated: true, completion: nil)
+    }
+    
+    
     
 }
