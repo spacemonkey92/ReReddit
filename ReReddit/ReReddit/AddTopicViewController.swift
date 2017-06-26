@@ -70,6 +70,7 @@ class AddTopicViewController: UIViewController {
         self.topicTextField.topAnchor.constraint(equalTo: self.navBar.bottomAnchor, constant: 20).isActive = true
         let heightConstraint = NSLayoutConstraint(item: topicTextField, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 170)
         topicTextField.addConstraint(heightConstraint)
+        topicTextField.becomeFirstResponder()
     }
     
     func setupButton(){
@@ -85,6 +86,7 @@ class AddTopicViewController: UIViewController {
     
     
     func close(){
+        self.view.endEditing(false)
         self.dismiss(animated: true, completion: nil)
     }
     
